@@ -19,6 +19,25 @@ public class Book {
     
     private int publicationYear;
 
+    
+    
+	public Book(int id, String isbn, String title, String author, int publicationYear) {
+		super();
+		this.id = id;
+		this.isbn = isbn;
+		this.title = title;
+		this.author = author;
+		this.publicationYear = publicationYear;
+	}
+	
+	
+
+	public Book() {
+
+	}
+
+
+
 	public int getId() {
 		return id;
 	}
@@ -64,6 +83,9 @@ public class Book {
 		return "Book [id=" + id + ", isbn=" + isbn + ", title=" + title + ", author=" + author + ", publicationYear="
 				+ publicationYear + "]";
 	}
+
+
+
     
     
 	
