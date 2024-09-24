@@ -32,37 +32,26 @@ public class BookController {
 	 @GetMapping("/all-books")
 	 public ResponseEntity<List<Book>> getAllBooks() {
 		 List<Book> books = bookService.getAllBooks();
-	     return new ResponseEntity<>(books, HttpStatus.OK);
+	     return ResponseEntity.ok(books);
 	    }
 	 
 	 
 	 @GetMapping("book-by-isbn/{isbn}")
-	 public ResponseEntity<Book> getBookByIsbn(@PathVariable String isbn) {
-		 Optional<Book> book = bookService.getBookByIsbn(isbn);
-	     return book.map(ResponseEntity::ok)
-	    		 .orElseGet(() -> ResponseEntity.notFound().build());
-	    }
+	 public ResponseEntity<Optional<Book>> getBookByIsbn(@PathVariable String isbn) {
+	     Optional<Book> book = bookService.getBookByIsbn(isbn);
+	     return ResponseEntity.ok(book);
+	 }
+
 	 
 	 @PutMapping("update-book/{isbn}")
-	 public ResponseEntity<Book> putMethodName(@PathVariable String isbn, @RequestBody Book updatedBook) throws InvalidIsbnException {
-		 Book book = bookService.getBookByIsbn(isbn)
-		            .orElseThrow(() -> new InvalidIsbnException("Book not found with ISBN: " + isbn));
-		 
-		 book.setTitle(updatedBook.getTitle());
-		 book.setAuthor(updatedBook.getAuthor());
-		 book.setPublicationYear(updatedBook.getPublicationYear());
-		 bookService.updateBook(book);
-		 
-		 return ResponseEntity.ok(book);
+	 public ResponseEntity<Book> updateBookDetails(@PathVariable String isbn, @RequestBody Book updatedBook) throws InvalidIsbnException {
+	     Book updated = bookService.updateBookDetails(isbn, updatedBook);
+	     return ResponseEntity.ok(updated);
 	 }
 	 
 	 @DeleteMapping("/delete-book/{isbn}")
-	 public ResponseEntity<?> deleteBook(@PathVariable String isbn) throws InvalidIsbnException {
-
-	     Book book = bookService.getBookByIsbn(isbn)
-	             .orElseThrow(() -> new InvalidIsbnException("Book not found with ISBN: " + isbn));
-	     bookService.deleteBook(book);
-
+	 public ResponseEntity<String> deleteBook(@PathVariable String isbn) throws InvalidIsbnException {
+	     bookService.deleteBookByIsbn(isbn);
 	     return ResponseEntity.ok("Book with ISBN: " + isbn + " deleted successfully.");
 	 }
 

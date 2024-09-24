@@ -30,11 +30,29 @@ public class BookService {
 		}
 	  
 	  
-	  public void updateBook(Book book) {
-		    bookRepository.save(book); 
+	  public Book updateBookDetails(String isbn, Book updatedBook) throws InvalidIsbnException {
+		    Optional<Book> optionalBook = bookRepository.findByIsbn(isbn);
+		    
+		    if (optionalBook.isEmpty()) {
+		        throw new InvalidIsbnException("Book not found with ISBN: " + isbn);
+		    }
+		    
+		    Book book = optionalBook.get();
+		    book.setTitle(updatedBook.getTitle());
+		    book.setAuthor(updatedBook.getAuthor());
+		    book.setPublicationYear(updatedBook.getPublicationYear());
+		    
+		    return bookRepository.save(book);
 		}
 	  
-	  public void deleteBook(Book book) {
+	  public void deleteBookByIsbn(String isbn) throws InvalidIsbnException {
+		    Optional<Book> optionalBook = bookRepository.findByIsbn(isbn);
+		    
+		    if (optionalBook.isEmpty()) {
+		        throw new InvalidIsbnException("Book not found with ISBN: " + isbn);
+		    }
+		    
+		    Book book = optionalBook.get();
 		    bookRepository.delete(book);
 		}
 
