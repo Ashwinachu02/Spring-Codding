@@ -29,7 +29,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/token").permitAll()
                         .requestMatchers("/auth/signup").permitAll()
-                        
+                        .requestMatchers("/add/book").hasRole("ADMIN")
+                        .requestMatchers("all-books").permitAll()
+                        .requestMatchers("/book-by-isbn/{isbn}").permitAll()
+                        .requestMatchers("/update-book/{isbn}").hasRole("ADMIN")
+                        .requestMatchers("/delete-book/{isbn}").hasRole("ADMIN")
                         
                         .anyRequest().authenticated()
                 )
